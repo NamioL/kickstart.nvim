@@ -1,0 +1,14 @@
+{
+    "snip1": {
+        "prefix": "luaTest",
+        "body": [
+            "lualualua"
+        ],
+        "description": "lua snippet",
+        "luasnip": {
+            "priority": 2000,
+            "autotrigger": true,
+            "wordTrig": false
+        }
+    }
+}

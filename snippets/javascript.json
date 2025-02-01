@@ -1,0 +1,7 @@
+{
+  "Console Log": {
+    "prefix": "log",
+    "body": ["testing 1234"],
+    "description": "Log output to console"
+  }
+}

@@ -1,0 +1,31 @@
+{
+    "name": "My custum snippets",
+    "contributes": {
+        "snippets": [
+            {
+                "language": [
+                    "all"
+                ],
+                "path": "./snippets/all.json"
+            },
+            {
+                "language": [
+                    "lua"
+                ],
+                "path": "./lua.json"
+            },
+            {
+                "language": [
+                    "php"
+                ],
+                "path": "./php.json"
+            },
+            {
+                "language": [
+                    "javascript"
+                ],
+                "path": "./javascript.json"
+            }
+        ]
+    }
+}

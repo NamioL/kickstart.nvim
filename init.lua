@@ -21,7 +21,6 @@
 =====================================================================
 
 
-
 What is Kickstart?
 
   Kickstart.nvim is *not* a distribution.
@@ -30,7 +29,7 @@ What is Kickstart?
     The goal is that you can read every line of code, top-to-bottom, understand
     what your configuration is doing, and modify it to suit your needs.
 
-    Once you've done that, you can start exploring, configuring and tinkering to
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
     make Neovim your own! That might mean leaving Kickstart just the way it is for a while
     or immediately breaking it into modular pieces. It's up to you!
 
@@ -230,7 +229,7 @@ vim.opt.rtp:prepend(lazypath)
 --    :Lazy update
 --
 -- NOTE: Here is where you install your plugins.
-require('lazy').setup({
+require('lazy').setup {
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
 
@@ -273,7 +272,7 @@ require('lazy').setup({
   -- Then, because we use the `opts` key (recommended), the configuration runs
   -- after the plugin has been loaded as `require(MODULE).setup(opts)`.
 
-  { -- Useful plugin to show you pending keybinds.
+  {                     -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
     opts = {
@@ -319,7 +318,7 @@ require('lazy').setup({
 
       -- Document existing key chains
       spec = {
-        { '<leader>c', group = '[C]ode', mode = { 'n', 'x' } },
+        { '<leader>c', group = '[C]ode',     mode = { 'n', 'x' } },
         { '<leader>d', group = '[D]ocument' },
         { '<leader>r', group = '[R]ename' },
         { '<leader>s', group = '[S]earch' },
@@ -359,7 +358,7 @@ require('lazy').setup({
       { 'nvim-telescope/telescope-ui-select.nvim' },
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
-      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
+      { 'nvim-tree/nvim-web-devicons',            enabled = vim.g.have_nerd_font },
     },
     config = function()
       -- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -455,7 +454,7 @@ require('lazy').setup({
       },
     },
   },
-  { 'Bilal2453/luvit-meta', lazy = true },
+  { 'Bilal2453/luvit-meta',     lazy = true },
   {
     -- Main LSP Configuration
     'neovim/nvim-lspconfig',
@@ -467,7 +466,7 @@ require('lazy').setup({
 
       -- Useful status updates for LSP.
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim', opts = {} },
+      { 'j-hui/fidget.nvim',       opts = {} },
 
       -- Allows extra capabilities provided by nvim-cmp
       'hrsh7th/cmp-nvim-lsp',
@@ -532,7 +531,7 @@ require('lazy').setup({
           --  the definition of its *type*, not where it was *defined*.
           map('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
 
-          -- Fuzzy find all the symbols in your current document.
+          -- Fuzzy find all the symbols in your ment.
           --  Symbols are things like variables, functions, types, etc.
           map('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
 
@@ -660,9 +659,7 @@ require('lazy').setup({
       -- You can add other tools here that you want Mason to install
       -- for you, so that they are available from within Neovim.
       local ensure_installed = vim.tbl_keys(servers or {})
-      vim.list_extend(ensure_installed, {
-        'stylua', -- Used to format Lua code
-      })
+      vim.list_extend(ensure_installed, {})
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
       require('mason-lspconfig').setup {
@@ -740,16 +737,22 @@ require('lazy').setup({
           end
           return 'make install_jsregexp'
         end)(),
+        config = function()
+          require("luasnip.loaders.from_vscode").lazy_load()
+          -- specify the full path...
+          require("luasnip.loaders.from_vscode").lazy_load({
+            paths = "~/.config/nvim/snippets",
+            callback = function()
+              print("done loading snippets")
+            end
+          })
+          -- or relative to the directory of $MYVIMRC
+          require("luasnip.loaders.from_vscode").load({ paths = "./snippets" })
+        end,
         dependencies = {
-          -- `friendly-snippets` contains a variety of premade snippets.
-          --    See the README about individual language/framework/plugin snippets:
-          --    https://github.com/rafamadriz/friendly-snippets
-          -- {
-          --   'rafamadriz/friendly-snippets',
-          --   config = function()
-          --     require('luasnip.loaders.from_vscode').lazy_load()
-          --   end,
-          -- },
+          {
+            "rafamadriz/friendly-snippets",
+          },
         },
       },
       'saadparwaiz1/cmp_luasnip',
@@ -764,13 +767,16 @@ require('lazy').setup({
       -- See `:help cmp`
       local cmp = require 'cmp'
       local luasnip = require 'luasnip'
-      luasnip.config.setup {}
+      luasnip.config.setup {
+        enable_autosnippets = true,
+      }
 
       cmp.setup {
         snippet = {
           expand = function(args)
             luasnip.lsp_expand(args.body)
           end,
+          enable_autosnippets = true
         },
         completion = { completeopt = 'menu,menuone,noinsert' },
 
@@ -906,7 +912,22 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'php_only' },
+      ensure_installed = {
+        'bash',
+        'c',
+        'diff',
+        'html',
+        'lua',
+        'luadoc',
+        'markdown',
+        'markdown_inline',
+        'query',
+        'vim',
+        'vimdoc',
+        'php_only',
+        'json',
+        'yaml',
+      },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
@@ -914,17 +935,16 @@ require('lazy').setup({
         -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
         --  If you are experiencing weird indenting issues, add the language to
         --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-        additional_vim_regex_highlighting = { 'ruby' },
       },
-      indent = { enable = true, disable = { 'ruby' } },
+      indent = { enable = true },
     },
-    -- There are additional nvim-treesitter modules that you can use to interact
-    -- with nvim-treesitter. You should go explore a few and see what interests you:
-    --
-    --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
-    --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
-    --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
   },
+  -- There are additional nvim-treesitter modules that you can use to interact
+  -- with nvim-treesitter. You should go explore a few and see what interests you:
+  --
+  --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
+  --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
+  --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
   {
     'zbirenbaum/copilot.lua',
     cmd = 'Copilot',
@@ -941,6 +961,56 @@ require('lazy').setup({
     after = { 'copilot.lua' },
     config = function()
       require('copilot_cmp').setup()
+    end,
+  },
+  { 'kevinhwang91/promise-async' },
+  {
+    -- Add the Laravel.nvim plugin which gives the ability to run Artisan commands
+    -- from Neovim.
+    'adalessa/laravel.nvim',
+    dependencies = {
+      'nvim-telescope/telescope.nvim',
+      'tpope/vim-dotenv',
+      'MunifTanjim/nui.nvim',
+      'nvimtools/none-ls.nvim',
+    },
+    cmd = { 'Artisan', 'Composer', 'Npm', 'Laravel' },
+    keys = {
+      { '<leader>la', ':Laravel artisan<cr>' },
+      { '<leader>lr', ':Laravel routes<cr>' },
+      { '<leader>lm', ':Laravel related<cr>' },
+    },
+    event = { 'VeryLazy' },
+    config = true,
+    opts = {
+      lsp_server = 'intelephense',
+      features = { null_ls = { enable = false } },
+    },
+  },
+  {
+    'nvim-neotest/neotest',
+    lazy = true,
+    dependencies = {
+      'olimorris/neotest-phpunit',
+      'nvim-neotest/nvim-nio',
+      'nvim-lua/plenary.nvim',
+      'antoinemadec/FixCursorHold.nvim',
+      'nvim-treesitter/nvim-treesitter',
+    },
+    config = function()
+      require('neotest').setup {
+        adapters = {
+          require 'neotest-phpunit' {
+            phpunit_cmd = function()
+              return 'test' -- for `dap` strategy then it must return string (table values will cause validation error)
+            end,
+            root_files = { 'composer.json', 'phpunit.xml', '.gitignore' },
+            filter_dirs = { '.git', 'node_modules' },
+            env = {},  -- for example {XDEBUG_CONFIG = 'idekey=neotest'}
+            dap = nil, -- to configure `dap` strategy put single element from `dap.configurations.php`
+          },
+        },
+      }
     end,
   },
 
@@ -970,30 +1040,74 @@ require('lazy').setup({
   -- Or use telescope!
   -- In normal mode type `<space>sh` then write `lazy.nvim-plugin`
   -- you can continue same window with `<space>sr` which resumes last telescope search
-}, {
-  ui = {
-    -- If you are using a Nerd Font: set icons to an empty table which will use the
-    -- default lazy.nvim defined Nerd Font icons, otherwise define a unicode icons table
-    icons = vim.g.have_nerd_font and {} or {
-      cmd = '⌘',
-      config = '🛠',
-      event = '📅',
-      ft = '📂',
-      init = '⚙',
-      keys = '🗝',
-      plugin = '🔌',
-      runtime = '💻',
-      require = '🌙',
-      source = '📄',
-      start = '🚀',
-      task = '📌',
-      lazy = '💤 ',
-    },
-  },
-})
+}
+
+vim.keymap.set('n', '<leader>tf', function()
+  require('neotest').run.run(vim.fn.expand '%')
+end, { desc = 'Run test file' })
+
+vim.keymap.set('n', '<leader>tn', function()
+  require('neotest').run.run()
+end, { desc = 'Run nearest test' })
 
 vim.keymap.set('n', '<leader>pv', ':Ex<Return>', { desc = 'Go to explorer' })
+
 vim.opt.shiftwidth = 4
 vim.opt.tabstop = 4
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+
+-- Resizes
+vim.api.nvim_create_user_command("Vr", function(opts)
+  local usage = "Usage: [VirticalResize] :Vr {number (%)}"
+  if not opts.args or not string.len(opts.args) == 2 then
+    print(usage)
+    return
+  end
+  vim.cmd(":vertical resize " .. vim.opt.columns:get() * (opts.args / 100.0))
+end, { nargs = "*" })
+
+vim.api.nvim_create_user_command("Hr", function(opts)
+  local usage = "Usage: [HorizontalResize] :Hr {number (%)}"
+  if not opts.args or not string.len(opts.args) == 2 then
+    print(usage)
+    return
+  end
+  vim.cmd(
+    ":resize "
+    .. (
+      (vim.opt.lines:get() - vim.opt.cmdheight:get())
+      * (opts.args / 100.0)
+    )
+  )
+end, { nargs = "*" })
+
+local lastScreenPercent = 0;
+
+
+vim.keymap.set('n', '<leader>pr', function()
+  if lastScreenPercent == 50 or lastScreenPercent == 0 then
+    lastScreenPercent = 75
+  elseif lastScreenPercent == 75 then
+    lastScreenPercent = 50
+  end
+  vim.cmd(':Vr ' .. lastScreenPercent)
+end, { desc = 'Go to explorer' })
+
+
+-- Get the class name from the current file name
+local function get_classname_from_filename()
+  local filename = vim.fn.expand('%:t:r')
+  return filename
+end
+
+-- Add a new snippet for creating a new PHP class
+require("luasnip").add_snippets("php", {
+  require("luasnip").snippet("newclass", {
+    require("luasnip").text_node({ "<?php", "", "declare(strict_types=1);", "", "class " }),
+    require("luasnip").function_node(function() return get_classname_from_filename() end, {}),
+    require("luasnip").text_node({ " {", "}" })
+  })
+}, {
+  key = "php_snippets"
+})
