@@ -92,7 +92,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
@@ -963,6 +963,19 @@ require('lazy').setup {
       require('copilot_cmp').setup()
     end,
   },
+  {
+    'MeanderingProgrammer/render-markdown.nvim',
+    -- dependencies = {
+    --   'nvim-treesitter/nvim-treesitter',
+    --   'echasnovski/mini.nvim',
+    --   'echasnovski/mini.icons',
+    -- },                                                                                   -- if you use the mini.nvim suite
+    -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
+    dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
+    ---@module 'render-markdown'
+    ---@type render.md.UserConfig
+    opts = {},
+  },
   { 'kevinhwang91/promise-async' },
   {
     -- Add the Laravel.nvim plugin which gives the ability to run Artisan commands
@@ -1084,6 +1097,13 @@ end, { nargs = "*" })
 
 local lastScreenPercent = 0;
 
+vim.keymap.set("n", "<", function()
+  vim.cmd(":vertical resize +5")
+end, { desc = "move pane to the left" })
+
+vim.keymap.set("n", "<", function()
+  vim.cmd(":vertical resize -5")
+end, { desc = "move pane to the left" })
 
 vim.keymap.set('n', '<leader>pr', function()
   if lastScreenPercent == 50 or lastScreenPercent == 0 then
